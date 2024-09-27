@@ -15,19 +15,20 @@ class NavigationBarApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
-      home: const BottomNavBar(),
+      home: const FluffyBottomNavBar(),
     );
   }
 }
 
-class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({super.key});
+// Fluffy bottom navigation bar
+class FluffyBottomNavBar extends StatefulWidget {
+  const FluffyBottomNavBar({super.key});
 
   @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
+  State<FluffyBottomNavBar> createState() => _FluffyBottomNavBarState();
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
+class _FluffyBottomNavBarState extends State<FluffyBottomNavBar> {
   int currentPageIndex = 0;
 
   void _showModalBottomSheet(BuildContext context) {
@@ -116,6 +117,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 }
 
+// Fluffy navigation bar
 class FluffyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;

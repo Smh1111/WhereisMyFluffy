@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whereismyfluffy/widgets/pets_postcard.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -9,88 +10,84 @@ class HomePage extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: ListView(
         children: [
-          _buildCard(
-            name: "John",
-            imageUrl:
-                "https://placekitten.com/200/300", // Replace with real image URL
-            description: "John has seen your PANDA",
-            distance: "150m",
+          _buildSearchBar(),
+          const SizedBox(height: 16.0),
+          _buildEmpytAdvertisement(),
+          const SizedBox(height: 16.0),
+          _buildPetsPostCard(
+            name: 'Fluffy',
+            userImageUrl: 'https://via.placeholder.com/150',
+            description: 'Cute and fluffy',
+            distance: '1.5 km',
+            petImageUrl: 'https://via.placeholder.com/800',
           ),
-          _buildCard(
-            name: "Sarah",
-            imageUrl:
-                "https://placekitten.com/200/301", // Replace with real image URL
-            description: "Sarah has seen your DOGGO",
-            distance: "300m",
-          ),
-          _buildCard(
-            name: "Michael",
-            imageUrl:
-                "https://placekitten.com/200/302", // Replace with real image URL
-            description: "Michael has seen your CATTO",
-            distance: "1.2km",
+          const SizedBox(height: 16.0),
+          _buildPetsPostCard(
+            name: 'Bella',
+            userImageUrl: 'https://via.placeholder.com/150',
+            description: 'Cute and fluffy',
+            distance: '1.5 km',
+            petImageUrl: 'https://via.placeholder.com/150',
           ),
         ],
       ),
     );
   }
 
-  Widget _buildCard({
-    required String name,
-    required String imageUrl,
-    required String description,
-    required String distance,
-  }) {
+  Widget _buildSearchBar() {
+    return TextField(
+      decoration: InputDecoration(
+        hintText: 'Search',
+        prefixIcon: const Icon(Icons.search),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmpytAdvertisement() {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
           children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(imageUrl), // Pet's image
-            ),
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    description,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Distance: $distance',
-                    style: const TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
+            Text(
+              'No pets found',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.more_vert),
-              onPressed: () {
-                // Action when pressing more options
-              },
+            SizedBox(height: 8),
+            Text(
+              'Try again later',
+              style: TextStyle(
+                fontSize: 16,
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildPetsPostCard({
+    required String name,
+    required String userImageUrl,
+    required String description,
+    required String distance,
+    required String petImageUrl,
+
+  }) {
+    return PetsPostCard(
+      name: name,
+      userImageUrl: userImageUrl,
+      description: description,
+      distance: distance,
+      petImageUrl: petImageUrl,
     );
   }
 }
