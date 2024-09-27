@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:whereismyfluffy/pages/home_page.dart';
+import 'package:whereismyfluffy/pages/pet_page';
 
 /// Flutter code sample for [NavigationBar].
 
@@ -11,25 +15,61 @@ class NavigationBarApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
-      home: const NavigationExample(),
+      home: const BottomNavBar(),
     );
   }
 }
 
-class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
+class BottomNavBar extends StatefulWidget {
+  const BottomNavBar({super.key});
 
   @override
-  State<NavigationExample> createState() => _NavigationExampleState();
+  State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
-class _NavigationExampleState extends State<NavigationExample> {
+class _BottomNavBarState extends State<BottomNavBar> {
   int currentPageIndex = 0;
+
+  void _showModalBottomSheet(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 500,
+          color: Colors.amber,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Text('Modal BottomSheet'),
+                ElevatedButton(
+                  child: const Text('Close BottomSheet'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
+      appBar: const FluffyAppBar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(36.0)),
+        ),
+        onPressed: () {
+          _showModalBottomSheet(context);
+        },
+        child: const Icon(Icons.add),
+      ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -38,105 +78,93 @@ class _NavigationExampleState extends State<NavigationExample> {
         },
         indicatorColor: Colors.amber,
         selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Badge(child: Icon(Icons.notifications_sharp)),
-            label: 'Notifications',
-          ),
-          NavigationDestination(
-            icon: Badge(
-              label: Text('2'),
-              child: Icon(Icons.messenger_sharp),
+            selectedIcon: Transform.scale(
+              scale: 1.5,
+              child: const Icon(Icons.pets),
             ),
-            label: 'Messages',
+            icon: Badge(
+                label: const Text('2'),
+                child: Transform.scale(
+                  scale: 1.5,
+                  child: const Icon(Icons.pets),
+                )),
+            label: 'Pets',
+          ),
+          NavigationDestination(
+            selectedIcon: Transform.scale(
+              scale: 1.5,
+              child: const Icon(Icons.home_rounded),
+            ),
+            icon: Transform.scale(
+              scale: 1.5,
+              child: const Icon(Icons.home_rounded),
+            ),
+            label: 'Home',
           ),
         ],
       ),
       body: <Widget>[
+        /// Pet page
+        const HomePage(),
+
         /// Home page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: const EdgeInsets.all(8.0),
-          child: SizedBox.expand(
-            child: Center(
-              child: Text(
-                'Home page',
-                style: theme.textTheme.titleLarge,
+        const HomePage(),
+      ][currentPageIndex],
+    );
+  }
+}
+
+class FluffyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  final Size preferredSize;
+
+  const FluffyAppBar({super.key})
+      : preferredSize = const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.menu), // Replace with your desired icon
+        onPressed: () {
+          // Action when menu icon is pressed
+        },
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Spacer(),
+          ElevatedButton(
+            onPressed: () {
+              // Action when logout button is pressed
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.blue, backgroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ), // Button text color
+            ),
+            child: const Text(
+              'Logout',
+              style: TextStyle(
+                color: Colors.blue, // Text color for logout button
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-        ),
-
-        /// Notifications page
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        /// Messages page
-        ListView.builder(
-          reverse: true,
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    'Hello',
-                    style: theme.textTheme.bodyLarge!
-                        .copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ),
-              );
-            }
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  'Hi!',
-                  style: theme.textTheme.bodyLarge!
-                      .copyWith(color: theme.colorScheme.onPrimary),
-                ),
-              ),
-            );
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.account_circle),
+          onPressed: () {
+            // Action when profile icon is pressed
           },
         ),
-      ][currentPageIndex],
+      ],
     );
   }
 }
