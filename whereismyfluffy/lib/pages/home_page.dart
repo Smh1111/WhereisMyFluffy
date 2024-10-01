@@ -16,18 +16,19 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 16.0),
           _buildPetsPostCard(
             name: 'Fluffy',
-            userImageUrl: 'https://via.placeholder.com/150',
+            userImageUrl: 
+                "https://placedog.net/500",
             description: 'Cute and fluffy',
             distance: '1.5 km',
-            petImageUrl: 'https://via.placeholder.com/800',
+            petImageUrl: 'https://placedog.net/500',
           ),
           const SizedBox(height: 16.0),
           _buildPetsPostCard(
             name: 'Bella',
-            userImageUrl: 'https://via.placeholder.com/150',
+            userImageUrl: 'https://placedog.net/500/g',
             description: 'Cute and fluffy',
             distance: '1.5 km',
-            petImageUrl: 'https://via.placeholder.com/150',
+            petImageUrl: 'https://placedog.net/500/g',
           ),
         ],
       ),
@@ -55,7 +56,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'No pets found',
+              'No Ad found',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,

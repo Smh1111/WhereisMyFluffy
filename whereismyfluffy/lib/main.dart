@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:whereismyfluffy/pages/home_page.dart';
-import 'package:whereismyfluffy/pages/pet_page';
+import 'package:whereismyfluffy/pages/pet_notification_page.dart';
+import 'package:whereismyfluffy/pages/user_profile_page.dart';
+import 'package:whereismyfluffy/widgets/forms/lost_petform.dart';
 
 /// Flutter code sample for [NavigationBar].
 
@@ -30,7 +30,12 @@ class FluffyBottomNavBar extends StatefulWidget {
 
 class _FluffyBottomNavBarState extends State<FluffyBottomNavBar> {
   int currentPageIndex = 0;
-
+  /*
+  ElevatedButton(
+                  child: const Text('Close BottomSheet'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                */
   void _showModalBottomSheet(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
@@ -38,19 +43,7 @@ class _FluffyBottomNavBarState extends State<FluffyBottomNavBar> {
         return Container(
           height: 500,
           color: Colors.amber,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Text('Modal BottomSheet'),
-                ElevatedButton(
-                  child: const Text('Close BottomSheet'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          ),
+          child: Center(child: LostPetForm()),
         );
       },
     );
@@ -60,7 +53,7 @@ class _FluffyBottomNavBarState extends State<FluffyBottomNavBar> {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
-      appBar: const FluffyAppBar(),
+      appBar: _buildAppBar(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         shape: const RoundedRectangleBorder(
@@ -107,8 +100,8 @@ class _FluffyBottomNavBarState extends State<FluffyBottomNavBar> {
         ],
       ),
       body: <Widget>[
-        /// Pet page
-        const HomePage(),
+        /// Pet Notification page
+        const PetNotificationPage(),
 
         /// Home page
         const HomePage(),
@@ -117,56 +110,38 @@ class _FluffyBottomNavBarState extends State<FluffyBottomNavBar> {
   }
 }
 
-// Fluffy navigation bar
-class FluffyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  final Size preferredSize;
-
-  const FluffyAppBar({super.key})
-      : preferredSize = const Size.fromHeight(kToolbarHeight);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      leading: IconButton(
-        icon: const Icon(Icons.menu), // Replace with your desired icon
+AppBar _buildAppBar(BuildContext context) {
+  return AppBar(
+    leading: Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Image.network(
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0ac-zjL8AyD6jZ-nQ-dv3PXDE1j1GS0PI3uSNqr9tJUBKLByd8bQ7B6w6etR-sSYPksA&usqp=CAU'), // Replace with your logo
+    ),
+    actions: [
+      TextButton(
         onPressed: () {
-          // Action when menu icon is pressed
+          // Logout action
         },
+        child: const Text('Logout', style: TextStyle(color: Colors.green)),
       ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(),
-          ElevatedButton(
-            onPressed: () {
-              // Action when logout button is pressed
-            },
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.blue, backgroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ), // Button text color
-            ),
-            child: const Text(
-              'Logout',
-              style: TextStyle(
-                color: Colors.blue, // Text color for logout button
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.account_circle),
-          onPressed: () {
-            // Action when profile icon is pressed
-          },
+      const SizedBox(width: 10),
+      GestureDetector(
+        onTap: () {
+          // Navigate to ProfilePage when tapped
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const UserProfilePage()),
+          );
+        },
+        child: const CircleAvatar(
+          backgroundImage: NetworkImage(
+              'https://pbs.twimg.com/media/GV_t3lqaoAIbO3B.jpg:large'), // Replace with the user avatar
+          radius: 20,
         ),
-      ],
-    );
-  }
+      ),
+      const SizedBox(width: 15),
+    ],
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+  );
 }

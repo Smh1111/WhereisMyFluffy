@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:whereismyfluffy/pages/pet_profile_page.dart';
+import 'package:whereismyfluffy/pages/user_profile_page.dart';
+import 'package:whereismyfluffy/widgets/forms/found_petform.dart';
 
 class PetsPostCard extends StatelessWidget {
   final String name;
@@ -20,23 +24,7 @@ class PetsPostCard extends StatelessWidget {
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          height: 500,
-          color: Colors.amber,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Text('Modal BottomSheet'),
-                ElevatedButton(
-                  child: const Text('Close BottomSheet'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          ),
-        );
+        return const FoundPetForm();
       },
     );
   }
@@ -52,9 +40,21 @@ class PetsPostCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: NetworkImage(userImageUrl), // User image
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to ProfilePage when tapped
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const UserProfilePage()),
+                    );
+                  },
+                  child: const CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://pbs.twimg.com/media/GV_t3lqaoAIbO3B.jpg:large'), // Replace with the user avatar
+                    radius: 20,
+                  ),
                 ),
                 const SizedBox(width: 16.0),
                 Expanded(
@@ -98,14 +98,34 @@ class PetsPostCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Image on the left
-                Container(
-                  height: 200,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    image: DecorationImage(
-                      image: NetworkImage(petImageUrl),
-                      fit: BoxFit.cover,
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to ProfilePage when tapped
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PetProfilePage(
+                                petName: 'Panda',
+                                gender: 'Male',
+                                color: 'Black and White',
+                                age: '3 years',
+                                weight: '6 Lbs',
+                                breed: 'Chinese Panda',
+                                descriptionItems: [
+                                  'Cute little panda have a black collar with name tag'
+                                ],
+                              )),
+                    );
+                  },
+                  child: Container(
+                    height: 200,
+                    width: 150,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      image: DecorationImage(
+                        image: NetworkImage(petImageUrl),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -246,11 +266,9 @@ class PetsPostCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             // details of the pet
-            
 
             Row(
               children: [
-                
                 const Text('Details of the pet'),
                 const Spacer(),
                 ElevatedButton(
@@ -260,7 +278,8 @@ class PetsPostCard extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -275,7 +294,6 @@ class PetsPostCard extends StatelessWidget {
                 ),
               ],
             ),
-              
           ],
         ),
       ),
